@@ -23,4 +23,4 @@ apt-get install aircrack
 Script Details
 ---------------
 Check variables and make required change  
-Check wordlst naming and edit if required
+Check wordlst naming and edit if requiredg
